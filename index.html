@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mi Cartita de Navidad 🎄</title>
+
+  <!-- Importante para celulares -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Fuente bonita -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #ffecd2 0%, #fcb69f 30%, #ff9a9e 60%, #fad0c4 100%);
+      color: #333;
+      overflow-x: hidden;
+      overflow-y: auto;
+      padding: 16px 8px;
+    }
+
+    /* ❄ Copos de nieve */
+    .snowflake {
+      position: fixed;
+      top: -10px;
+      color: white;
+      font-size: 2.2rem;
+      animation: caer linear infinite;
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes caer {
+      0% { transform: translateY(-10vh); opacity: 0.9; }
+      100% { transform: translateY(110vh); opacity: 0; }
+    }
+
+    /* 🎉 Confetti */
+    .confetti {
+      position: fixed;
+      top: -10px;
+      width: 8px;
+      height: 14px;
+      border-radius: 2px;
+      animation: confetti-fall 3s linear forwards;
+      z-index: 900;
+      pointer-events: none;
+    }
+
+    @keyframes confetti-fall {
+      0% { transform: translateY(-10vh) rotateZ(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotateZ(360deg); opacity: 0; }
+    }
+
+    /* 🎄 Tarjeta */
+    .card {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 24px 20px 26px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      border: 2px solid #ffb6c1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ✨ Destello */
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.9), transparent);
+      transform: translateX(-120%);
+      pointer-events: none;
+    }
+
+    .card.shine::before {
+      animation: shine 1s ease-out;
+    }
+
+    @keyframes shine {
+      to { transform: translateX(120%); }
+    }
+
+    .card-header {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .card-header h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.1rem;
+      color: #d62839;
+    }
+
+    .card-header p {
+      font-size: 0.98rem;
+      color: #555;
+    }
+
+    .tagline {
+      margin-top: 6px;
+      font-size: 0.85rem;
+      color: #777;
+    }
+
+    /* 🔘 Botones superiores */
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.15s;
+    }
+
+    .btn-secondary { background: linear-gradient(135deg, #50c9c3, #96deda); }
+    .btn-outline { background: white; color: #d62839; border: 1px solid #f8a5c2; }
+
+    .btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+    }
+
+    /* 📄 Contenido de carta */
+    .card-body {
+      padding: 14px 16px 24px;
+      background: #fff8fb;
+      border: 1px dashed #f3a4c4;
+      border-radius: 14px;
+      position: relative;
+    }
+
+    .label-carta {
+      position: absolute;
+      top: -12px;
+      right: 16px;
+      background: #ffcad4;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      color: #8b1230;
+    }
+
+    h2 {
+      color: #c81d35;
+      margin-bottom: 8px;
+    }
+
+    .to {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    p { margin-bottom: 10px; line-height: 1.6; }
+
+    .signature {
+      margin-top: 12px;
+      text-align: right;
+      font-style: italic;
+    }
+
+    /* 🔮 Botón final */
+    .magia-final {
+      text-align: center;
+      margin-top: 24px;
+    }
+
+    /* POPUP */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      background: rgba(0,0,0,0.6);
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    .modal {
+      background: #fff8fb;
+      border-radius: 18px;
+      padding: 18px 20px;
+      width: 90%;
+      max-width: 420px;
+      text-align: center;
+      border: 1px solid #f3a4c4;
+      animation: fadePopup 0.2s ease-out;
+    }
+
+    @keyframes fadePopup {
+      from { opacity: 0; transform: translateY(10px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Modo oscuro */
+    body.dark { background: radial-gradient(circle at top, #243b55, #141e30); color: #f5f5f5; }
+    body.dark .card { background: rgba(20,30,48,0.9); border-color: #546a7b; }
+    body.dark .card-body { background: #182234; border-color: #3e4a63; }
+    body.dark .modal { background: #182234; border-color: #3e4a63; color: white; }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- ❄ Nieve -->
+  <div class="snowflake" style="left:5%; animation-duration:9s;">❄</div>
+  <div class="snowflake" style="left:20%; animation-duration:11s;">✼</div>
+  <div class="snowflake" style="left:40%; animation-duration:10s;">❅</div>
+  <div class="snowflake" style="left:60%; animation-duration:13s;">✻</div>
+  <div class="snowflake" style="left:80%; animation-duration:12s;">❅</div>
+
+  <div class="card">
+
+    <div class="card-header">
+      <h1>🎄 Mi Cartita de Navidad 🎁</h1>
+      <p>Hecha con mucho cariño, paciencia y obviamente polvos de Hadas</p>
+      <p class="tagline">Desde aquí al polo norte o a Florida 3052 mando mi cartitaaaa</p>
+    </div>
+
+    <div class="buttons">
+      <button class="btn btn-secondary" onclick="mostrarSorpresa()">✨ Mensaje sorpresa</button>
+      <button class="btn btn-outline" onclick="toggleModo()">🌙 Modo claro / oscuro</button>
+    </div>
+
+    <div class="card-body">
+      <div class="label-carta">Mi mensaje</div>
+
+      <h2>Feliz Navidad JOJOJOOOOO ✨</h2>
+
+      <p class="to">Para: <strong>🎅 Tia Carmen mi Duende Navideño</strong></p>
+
+      <p>
+        En esta Navidad quiero desearle mucha paz, salud y momentos llenos de risas.
+        Gracias por ser parte de mi vida y acompañarme en los momentos bonitos y también
+        en los difíciles.
+      </p>
+
+      <p>
+        Ojalá que el próximo año este lleno de pequeños instantes que la hagan sonreír cada día.
+        Y como me porté bien en la casita y en el jardín, tal vez un engañito:
+      </p>
+
+      <p>
+        • Un reloj bonito<br>
+        • Una cartera<br>
+        • Algo con calaveras<br>
+        • Calcetines con monitos<br>
+        • O cualquier cosita con amor ✨
+      </p>
+
+      <p>Le mando un abrazo gigante, lleno de luz, cariño y espíritu navideño.</p>
+
+      <p class="signature">
+        Con mucho cariño,<br>
+        <strong>Karencilla 🎀</strong>
+      </p>
+
+      <div class="magia-final">
+        <button class="btn" onclick="magiaNavidena()">🪄 Magia navideña</button>
+      </div>
+    </div>
+
+    <div class="footer" style="text-align:center; margin-top:12px; font-size:0.8rem;">
+      Hecho con MUUUUUCHO AMOR 💖✨
+    </div>
+
+  </div>
+
+  <!-- POPUP -->
+  <div class="modal-overlay" id="sorpresa-modal">
+    <div class="modal">
+      <h3>✨ Mensajito especial ✨</h3>
+      <p><i>“Hay personas que iluminan el mundo solo con existir.”</i></p>
+      <p>— Benedetti 💫</p>
+      <button class="btn" onclick="cerrarSorpresa()">Cerrar 💌</button>
+    </div>
+  </div>
+
+  <script>
+    /* 🎉 Magia navideña */
+    function magiaNavidena() {
+      lanzarConfetti();
+      brilloTarjeta();
+    }
+
+    function lanzarConfetti() {
+      const colors = ['#ff0000', '#00a000', '#ffd700', '#ffffff'];
+      for (let i = 0; i < 80; i++) {
+        const conf = document.createElement('span');
+        conf.className = 'confetti';
+        conf.style.left = Math.random() * 100 + 'vw';
+        conf.style.animationDelay = (Math.random() * 0.5) + 's';
+        conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        document.body.appendChild(conf);
+        setTimeout(() => conf.remove(), 3000);
+      }
+    }
+
+    function brilloTarjeta() {
+      const card = document.querySelector('.card');
+      card.classList.add('shine');
+      setTimeout(() => card.classList.remove('shine'), 1100);
+    }
+
+    /* POPUP */
+    function mostrarSorpresa() {
+      document.getElementById('sorpresa-modal').style.display = 'flex';
+    }
+
+    function cerrarSorpresa() {
+      document.getElementById('sorpresa-modal').style.display = 'none';
+    }
+
+    document.getElementById('sorpresa-modal').addEventListener('click', function(e) {
+      if (e.target === this) cerrarSorpresa();
+    });
+
+    /* 🌙 Modo oscuro */
+    function toggleModo() {
+      document.body.classList.toggle("dark");
+    }
+  </script>
+
+</body>
+</html>
