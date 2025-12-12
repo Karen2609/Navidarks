@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mi Cartita de Navidad 🎄</title>
+
+  <!-- Importante para que se vea bien en el celular -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Fuente bonita de Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* Estilos generales */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #ffecd2 0%, #fcb69f 30%, #ff9a9e 60%, #fad0c4 100%);
+      color: #333;
+      overflow-x: hidden;
+      overflow-y: auto;       /* permite scrollear vertical */
+      padding: 16px 8px;
+    }
+
+    /* Copos de nieve animados (más GRANDES) */
+    .snowflake {
+      position: fixed;
+      top: -10px;
+      color: white;
+      font-size: 2.2rem;
+      animation-name: caer;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes caer {
+      0% {
+        transform: translateY(-10vh);
+        opacity: 0.9;
+      }
+      100% {
+        transform: translateY(110vh);
+        opacity: 0;
+      }
+    }
+
+    /* Confetti */
+    .confetti {
+      position: fixed;
+      top: -10px;
+      width: 8px;
+      height: 14px;
+      border-radius: 2px;
+      animation: confetti-fall 3s linear forwards;
+      z-index: 900;
+      pointer-events: none;
+    }
+
+    @keyframes confetti-fall {
+      0% {
+        transform: translateY(-10vh) rotateZ(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh) rotateZ(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Tarjeta principal */
+    .card {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;               /* centrada */
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 24px 20px 26px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      border: 2px solid #ffb6c1;
+      backdrop-filter: blur(6px);
+      overflow: hidden;             /* para el brillo */
+    }
+
+    /* Brillo mágico */
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255, 255, 255, 0.9),
+        transparent
+      );
+      transform: translateX(-120%);
+      pointer-events: none;
+    }
+
+    .card.shine::before {
+      animation: shine 1s ease-out;
+    }
+
+    @keyframes shine {
+      to {
+        transform: translateX(120%);
+      }
+    }
+
+    .card-header {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .card-header h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.1rem;
+      color: #d62839;
+    }
+
+    .card-header p {
+      font-size: 0.98rem;
+      color: #555;
+    }
+
+    .tagline {
+      margin-top: 6px;
+      font-size: 0.85rem;
+      color: #777;
+    }
+
+    /* Área de botones (arriba, sin Magia navideña) */
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin: 14px 0 20px;
+    }
+
+    .btn {
+      border: none;
+      padding: 10px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s;
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      color: white;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+
+    .btn span {
+      font-size: 1.1rem;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+      filter: brightness(1.05);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #50c9c3, #96deda);
+    }
+
+    .btn-outline {
+      background: white;
+      color: #d62839;
+      border: 1px solid #f8a5c2;
+      box-shadow: none;
+    }
+
+    .btn-outline:hover {
+      background: #ffe6ef;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    /* Botón de magia al final de la carta */
+    .magia-final {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    /* Contenido de la carta */
+    .card-body {
+      border-radius: 14px;
+      padding: 14px 16px 24px; /* ya no hace falta espacio extra para duende */
+      background: #fff8fb;
+      border: 1px dashed #f3a4c4;
+      position: relative;
+    }
+
+    .card-body h2 {
+      font-size: 1.25rem;
+      color: #c81d35;
+      margin-bottom: 8px;
+    }
+
+    .card-body .to {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #444;
+    }
+
+    .card-body p {
+      font-size: 0.98rem;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .card-body .signature {
+      margin-top: 10px;
+      font-style: italic;
+      text-align: right;
+      color: #666;
+    }
+
+    /* Etiqueta de "cartita" arriba a la derecha */
+    .label-carta {
+      position: absolute;
+      top: -12px;
+      right: 16px;
+      background: #ffcad4;
+      color: #8b1230;
+      font-size: 0.75rem;
+      padding: 4px 9px;
+      border-radius: 999px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    /* ==== POPUP (MODAL) del mensaje sorpresa ==== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;            /* se muestra con JS */
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    .modal {
+      background: #fff8fb;
+      border-radius: 18px;
+      padding: 18px 20px 16px;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.4);
+      border: 1px solid #f3a4c4;
+      position: relative;
+      text-align: center;
+      animation: aparecer 0.18s ease-out;
+    }
+
+    @keyframes aparecer {
+      0% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.97);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .modal h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      color: #c81d35;
+    }
+
+    .modal-texto {
+      font-size: 0.95rem;
+      color: #444;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .modal-cita {
+      font-style: italic;
+      margin-bottom: 6px;
+    }
+
+    .modal-autor {
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    .modal-close-btn {
+      margin-top: 10px;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      color: white;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .modal-close-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.25);
+    }
+
+    /* Modo oscuro */
+    body.dark {
+      background: radial-gradient(circle at top, #243b55, #141e30);
+      color: #f5f5f5;
+    }
+
+    body.dark .card {
+      background: rgba(20, 30, 48, 0.9);
+      border-color: #546a7b;
+    }
+
+    body.dark .card-body {
+      background: #182234;
+      border-color: #3e4a63;
+    }
+
+    body.dark .card-body p,
+    body.dark .card-body .to,
+    body.dark .card-body .signature,
+    body.dark .card-header p,
+    body.dark .tagline {
+      color: #f5f5f5;
+    }
+
+    body.dark .label-carta {
+      background: #33415c;
+      color: #f5f5f5;
+    }
+
+    body.dark .btn-outline {
+      background: transparent;
+      color: #ffe6ef;
+      border-color: #ffe6ef;
+    }
+
+    body.dark .btn-outline:hover {
+      background: rgba(255,255,255,0.08);
+    }
+
+    body.dark .modal {
+      background: #182234;
+      border-color: #3e4a63;
+    }
+
+    body.dark .modal-texto,
+    body.dark .modal-cita,
+    body.dark .modal-autor,
+    body.dark .modal h3 {
+      color: #f5f5f5;
+    }
+
+    /* Footer pequeño */
+    .footer {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 0.75rem;
+      color: #888;
+    }
+
+    /* Ajustes extra para pantallas pequeñas */
+    @media (max-width: 480px) {
+      .card {
+        padding: 20px 14px 22px;
+        border-radius: 16px;
+      }
+
+      .card-header h1 {
+        font-size: 1.7rem;
+      }
+
+      .card-header p {
+        font-size: 0.9rem;
+      }
+
+      .card-body p {
+        font-size: 0.95rem;
+      }
+
+      .buttons {
+        gap: 8px;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Copos de nieve -->
+  <div class="snowflake" style="left:5%; animation-duration:9s;">❄</div>
+  <div class="snowflake" style="left:20%; animation-duration:11s; animation-delay:2s;">✼</div>
+  <div class="snowflake" style="left:35%; animation-duration:10s; animation-delay:1s;">❅</div>
+  <div class="snowflake" style="left:50%; animation-duration:13s; animation-delay:3s;">❄</div>
+  <div class="snowflake" style="left:65%; animation-duration:8s; animation-delay:0.5s;">✻</div>
+  <div class="snowflake" style="left:80%; animation-duration:12s; animation-delay:1.5s;">❅</div>
+  <div class="snowflake" style="left:90%; animation-duration:9s; animation-delay:2.5s;">❄</div>
+
+  <div class="card">
+    <div class="card-header">
+      <h1>🎄 Mi Cartita de Navidad 🎁</h1>
+      <p>Hecha con mucho cariño, paciencia y obviamente polvos de Hadas</p>
+      <p class="tagline">Desde aquí al polo norte o a Florida 3052 mando mi cartitaaaa</p>
+    </div>
+
+    <div class="buttons">
+      <button class="btn btn-secondary" onclick="mostrarSorpresa()">
+        <span>✨</span> Mensaje sorpresa
+      </button>
+      <button class="btn btn-outline" onclick="toggleModo()">
+        <span>🌙</span> Modo claro / oscuro
+      </button>
+    </div>
+
+    <div class="card-body" id="carta">
+      <div class="label-carta">Mi mensaje</div>
+      <h2>Feliz Navidad JOJOJOOOOO✨</h2>
+
+      <p class="to">Para: <strong>🎅 Tia Carmen mi Duende Navideño</strong></p>
+
+      <p>
+        En esta Navidad quiero desearle mucha paz, salud y momentos llenos de risas.
+        Gracias por ser parte de mi vida y acompañarme en los momentos bonitos y también
+        en los difíciles.
+      </p>
+      <p>
+        Ojalá que el próximo año este lleno de pequeños instantes que la hagan sonreír cada día
+        y solo quiero pedirle al duende navideño mucho amor y cariño dentro de la familia en esta navidad,
+        y como me porte bien en la casita y en el jardin jaja tal vez un engañito:
+      </p>
+      <p>
+        • Un reloj digital o cualquiera<br>
+        • Una cartera bonita<br>
+        • Lo que sea su cariño<br>
+        • Cositas con calaveras<br>
+        • Calcetines con monitos<br>
+        • Cualquier Cosita ✨
+      </p>
+      <p>
+        Le mando un abrazo gigante, lleno de luz, cariño y espíritu navideño.
+      </p>
+
+      <p class="signature">
+        Con mucho cariño,<br>
+        <strong>Karencilla 🎀</strong>
+      </p>
+
+      <!-- Botón de Magia navideña al final -->
+      <div class="magia-final">
+        <button class="btn" onclick="magiaNavidena()">
+          <span>🪄</span> Magia navideña
+        </button>
+      </div>
+    </div>
+
+    <div class="footer">
+      Hecho con MUUUUUUCHO AMOR 💖, y un poquito de magia navideña.
+    </div>
+  </div>
+
+  <!-- POPUP DEL MENSAJE SORPRESA -->
+  <div class="modal-overlay" id="sorpresa-modal">
+    <div class="modal">
+      <h3>✨ Mensaje para mi Tía Carmen ✨</h3>
+      <div class="modal-texto">
+        <p class="modal-cita">
+          “Hay personas que iluminan el mundo solo con existir; a ellas les debemos los momentos 
+          más sinceros del corazón.”
+        </p>
+        <p class="modal-autor">— Benedetti 💫</p>
+      </div>
+      <button class="modal-close-btn" onclick="cerrarSorpresa()">
+        Cerrar mensajito 💌
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Magia navideña: confetti + brillo
+    function magiaNavidena() {
+      lanzarConfetti();
+      brilloTarjeta();
+    }
+
+    function lanzarConfetti() {
+      const colors = ['#ff0000', '#00a000', '#ffd700', '#ffffff']; // rojo, verde, dorado, blanco
+      for (let i = 0; i < 80; i++) {
+        const conf = document.createElement('span');
+        conf.className = 'confetti';
+        conf.style.left = Math.random() * 100 + 'vw';
+        conf.style.animationDelay = (Math.random() * 0.5) + 's';
+        conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        document.body.appendChild(conf);
+
+        setTimeout(() => {
+          conf.remove();
+        }, 3000);
+      }
+    }
+
+    function brilloTarjeta() {
+      const card = document.querySelector('.card');
+      if (card) {
+        card.classList.add('shine');
+        setTimeout(() => {
+          card.classList.remove('shine');
+        }, 1100);
+      }
+    }
+
+    // Mostrar POPUP del mensajito sorpresa
+    function mostrarSorpresa() {
+      const modal = document.getElementById('sorpresa-modal');
+      modal.style.display = 'flex';
+    }
+
+    // Cerrar POPUP
+    function cerrarSorpresa() {
+      const modal = document.getElementById('sorpresa-modal');
+      modal.style.display = 'none';
+    }
+
+    // Cerrar el popup si se hace click fuera de la tarjeta
+    document.getElementById('sorpresa-modal').addEventListener('click', function (e) {
+      if (e.target === this) {
+        cerrarSorpresa();
+      }
+    });
+
+    // Función para cambiar entre modo claro y oscuro
+    function toggleModo() {
+      document.body.classList.toggle('dark');
+    }
+  </script>
+</body>
+</html>
